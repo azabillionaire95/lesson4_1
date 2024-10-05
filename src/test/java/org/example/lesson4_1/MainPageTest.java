@@ -35,7 +35,7 @@ public class MainPageTest {
 
     @Test
     public void search() {
-        String input = "Batman";
+        String input = "playwright";
 
 
         WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
