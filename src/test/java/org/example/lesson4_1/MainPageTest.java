@@ -9,8 +9,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainPageTest {
     private WebDriver driver;
@@ -35,7 +39,7 @@ public class MainPageTest {
 
     @Test
     public void search() {
-        String input = "playwright";
+        String input = "Selenium";
 
 
         WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
@@ -45,6 +49,42 @@ public class MainPageTest {
 
         WebElement searchPageField = driver.findElement(By.cssSelector("#sb_form_q"));
         assertEquals(input, searchPageField.getAttribute("value"));
+
+        List<WebElement> results = driver.findElements(By.cssSelector("h2 > a[href]"));
+
+        for (WebElement el : results){
+            System.out.println(el.getText());
+        }
+
     }
 
+    @Test
+    public void clickElement(){
+        String input = "Selenium";
+        WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
+        searchField.sendKeys(input);
+        searchField.submit();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.and(
+                ExpectedConditions.attributeContains(By.cssSelector("h2 > a[href]"), "href", "selenium"),
+                ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]"))
+        ));
+
+        List<WebElement> results = driver.findElements(By.cssSelector("h2 > a[href]"));
+
+
+//        for (WebElement el : results){
+//            System.out.println(el.getText());
+//        }
+
+        results.get(0).click();
+
+        ArrayList tabs = new ArrayList<> (driver.getWindowHandles());
+        if (tabs.size() > 1) driver.switchTo().window(tabs.get(1).toString());
+
+        String currentUrl = driver.getCurrentUrl();
+
+        assertEquals("https://www.selenium.dev/", currentUrl, "Первая ссылка ведет не на тот сайт");
+    }
 }
