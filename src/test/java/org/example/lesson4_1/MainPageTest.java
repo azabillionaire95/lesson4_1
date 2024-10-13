@@ -50,12 +50,6 @@ public class MainPageTest {
         WebElement searchPageField = driver.findElement(By.cssSelector("#sb_form_q"));
         assertEquals(input, searchPageField.getAttribute("value"));
 
-        List<WebElement> results = driver.findElements(By.cssSelector("h2 > a[href]"));
-
-        for (WebElement el : results){
-            System.out.println(el.getText());
-        }
-
     }
 
     @Test
@@ -80,8 +74,8 @@ public class MainPageTest {
 
         results.get(0).click();
 
-        ArrayList tabs = new ArrayList<> (driver.getWindowHandles());
-        if (tabs.size() > 1) driver.switchTo().window(tabs.get(1).toString());
+        ArrayList<String> tabs = new ArrayList<> (driver.getWindowHandles());
+        if (tabs.size() > 1) driver.switchTo().window(tabs.get(1));
 
         String currentUrl = driver.getCurrentUrl();
 
