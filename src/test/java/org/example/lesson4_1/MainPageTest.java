@@ -19,7 +19,6 @@ import java.util.List;
 public class MainPageTest {
     private WebDriver driver;
 
-
     @BeforeEach
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
@@ -29,7 +28,6 @@ public class MainPageTest {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www.bing.com/");
-
     }
 
     @AfterEach
@@ -37,23 +35,25 @@ public class MainPageTest {
         driver.quit();
     }
 
+    public void clickElement(List<WebElement> results, int num) {
+        results.get(num).click();
+        System.out.println("Клик по элементу: " + results.get(num).getText());
+    }
+
     @Test
     public void search() {
         String input = "Selenium";
-
 
         WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
         searchField.sendKeys(input);
         searchField.submit();
 
-
         WebElement searchPageField = driver.findElement(By.cssSelector("#sb_form_q"));
         assertEquals(input, searchPageField.getAttribute("value"));
-
     }
 
     @Test
-    public void clickElement(){
+    public void clickElementTest(){
         String input = "Selenium";
         WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
         searchField.sendKeys(input);
@@ -67,15 +67,10 @@ public class MainPageTest {
 
         List<WebElement> results = driver.findElements(By.cssSelector("h2 > a[href]"));
 
+        clickElement(results, 0);
 
-//        for (WebElement el : results){
-//            System.out.println(el.getText());
-//        }
-
-        results.get(0).click();
-
-        ArrayList<String> tabs = new ArrayList<> (driver.getWindowHandles());
-        if (tabs.size() > 1) driver.switchTo().window(tabs.get(1));
+        List<String> tabs_windows = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs_windows.get(tabs_windows.size() - 1));
 
         String currentUrl = driver.getCurrentUrl();
 
