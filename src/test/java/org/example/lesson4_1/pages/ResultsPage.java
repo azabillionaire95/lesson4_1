@@ -1,6 +1,5 @@
 package org.example.lesson4_1.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,13 +17,12 @@ public class ResultsPage {
     @FindBy(css = "#sb_form_q")
     private WebElement searchField;
 
-    @FindBy(css = "h2 > a[href]")
+    @FindBy(css = "h2 > a[href*='selenium.dev']")
     private List<WebElement> results;
 
     public void clickElement(int num) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]")));
-        results = driver.findElements(By.cssSelector("h2 > a[href]"));
+        wait.until(ExpectedConditions.elementToBeClickable(results.get(num)));
 
         results.get(num).click();
         System.out.println("Клик по элементу: " + results.get(num).getText());
@@ -35,13 +33,13 @@ public class ResultsPage {
         driver.switchTo().window(tabs_windows.get(tabs_windows.size() - 1));
     }
 
-    public String getTextFromSearchField(){
+    public String getTextFromSearchField() {
         String val = searchField.getAttribute("value");
         System.out.println("В строке поиска текст: " + val);
         return val;
     }
 
-    public ResultsPage(WebDriver driver){
+    public ResultsPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
